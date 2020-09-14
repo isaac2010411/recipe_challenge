@@ -35,11 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var constatns_1 = require("../../constatns");
 var typeorm_1 = require("typeorm");
 var userEntity_1 = require("../../entities/userEntity");
 var bcryptjs_1 = require("bcryptjs");
+var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 module.exports = {
     Query: {
         //return all users
@@ -54,32 +58,81 @@ module.exports = {
         signUp: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var name, email, password, user, newUser;
+                var name, email, password, user, saltNumber, newUser, error_1;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
                             name = input.name, email = input.email, password = input.password;
+                            _b.label = 1;
+                        case 1:
+                            _b.trys.push([1, 4, , 5]);
                             return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
                                     .createQueryBuilder("user")
                                     .where("user.email = :email", { email: email })
                                     .getOne()];
-                        case 1:
+                        case 2:
                             user = _b.sent();
                             if (user) {
                                 console.log(user);
-                                // throw new Error("Email already in use");
-                                return [2 /*return*/, user];
+                                throw new Error("Email already in use");
                             }
+                            saltNumber = 10;
                             newUser = {
                                 name: name,
                                 email: email,
-                                password: bcryptjs_1.hashSync(password, 10)
+                                password: bcryptjs_1.hashSync(password, saltNumber)
                             };
                             typeorm_1.getRepository(userEntity_1.User).create(newUser);
                             return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User).save(newUser)];
-                        case 2:
+                        case 3:
                             _b.sent();
                             return [2 /*return*/, newUser];
+                        case 4:
+                            error_1 = _b.sent();
+                            console.log(error_1);
+                            return [3 /*break*/, 5];
+                        case 5: return [2 /*return*/];
+                    }
+                });
+            });
+        },
+        login: function (_, _a) {
+            var input = _a.input;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var email, password, user, isPassword, secretToken, token, error_2;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            email = input.email, password = input.password;
+                            _b.label = 1;
+                        case 1:
+                            _b.trys.push([1, 4, , 5]);
+                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
+                                    .createQueryBuilder("user")
+                                    .where("user.email = :email", { email: email })
+                                    .getOne()];
+                        case 2:
+                            user = _b.sent();
+                            if (!user) {
+                                throw new Error("user not found");
+                            }
+                            ;
+                            return [4 /*yield*/, bcryptjs_1.compare(password, user.password.toString())];
+                        case 3:
+                            isPassword = _b.sent();
+                            if (!isPassword) {
+                                throw new Error("check data provider");
+                            }
+                            ;
+                            secretToken = process.env.SECRET_TOKEN_KEY || "mySecret";
+                            token = jsonwebtoken_1.default.sign({ email: user.email }, secretToken, { expiresIn: 60 * 60 });
+                            return [2 /*return*/, {
+                                    token: token
+                                }];
+                        case 4:
+                            error_2 = _b.sent();
+                            return [3 /*break*/, 5];
+                        case 5: return [2 /*return*/];
                     }
                 });
             });

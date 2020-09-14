@@ -8,10 +8,10 @@ export class User {
     id: String;
 
     @Column({type:"varchar" , length:"20" }) 
-    name: string;
+    name: String;
 
     @Column({type:"varchar" , length:"45"})
-    email: string;
+    email: String;
 
     @Column({type:"varchar" , length:"250"})
     password: String;
@@ -25,7 +25,7 @@ export class User {
     recipes: Recipe[];
     
     @CreateDateColumn()
-    createdAt: string;
+    createdAt: String;
 
     @UpdateDateColumn()
     updatedAt: String;

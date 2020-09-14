@@ -13,8 +13,18 @@ module.exports = gql`
     password:String!
   }
 
+  input loginInputUser {
+    email:String!
+    password:String!
+  }
+
   extend type Mutation {
-    signUp( input : singUpInputUser ):User
+    signUp(input : singUpInputUser!):User
+    login(input :loginInputUser!):Token
+  }
+
+  type Token {
+    token:String!
   }
 
   type User {
