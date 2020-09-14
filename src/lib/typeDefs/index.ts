@@ -7,9 +7,13 @@ const categoryTypeDef = require('./category')
 
 
 const typeDefs = gql`
+
+  scalar Date
+
   type Query {
     _:String
   },
+
   type Mutation{
     _:String
   }

@@ -1,12 +1,12 @@
 import  {recipesConstatns , users } from '../../constatns';
-import { connect } from '../../database/utils/connect';
-const UserEntity = require('../../database/entities/userEntity');
-
+import { getRepository } from  'typeorm'
+import { User } from '../../entities/userEntity';
+import { hashSync } from 'bcryptjs'
 module.exports = {
   
   Query: {
     //return all users
-    users: () => users,
+    users: () => users, 
 
     //return userfor id
     user: ( _:any , { id }:any ) => {
@@ -15,9 +15,30 @@ module.exports = {
   },
 
   Mutation: { 
-    signUp:async (_: any, { input }:any) => {
-      const { name, email, password } = input;
+    signUp: async (_: any, { input }: any) => {
       
+      const { name, email, password } = input;
+
+      const user = await getRepository<User>(User)
+        .createQueryBuilder("user")
+        .where("user.email = :email", { email: email })
+        .getOne();
+    
+      if (user) {
+        console.log(user)
+        // throw new Error("Email already in use");
+        return user
+      }
+
+      let newUser = {
+        name,
+        email,
+        password: hashSync( password , 10)
+      }
+
+      getRepository<User>(User).create(newUser)
+      await getRepository(User).save(newUser)
+      return newUser
     }
   },
 

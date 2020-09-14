@@ -21,6 +21,8 @@ module.exports = gql`
     id:ID!
     name:String!
     email:String!
+    createdAt:Date!
+    updatedAt:Date!
     recipes:[Recipe!]
   }
 
