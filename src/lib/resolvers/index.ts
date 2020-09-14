@@ -5,7 +5,7 @@ const categoryResolver = require('./category')
 
 
 
-export =[
+module.exports =[
   reipeResolver,
   userResolver,
   categoryResolver

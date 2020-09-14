@@ -1,16 +1,18 @@
+import { connect } from "./database/utils/connect";
+
 const express = require('express');
 const { ApolloServer , gql   } = require('apollo-server-express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const uuid = require('uuid');
+ 
 const resolvers = require('./lib/resolvers');
 const typeDefs = require('./lib/typeDefs');
 
 
-//set env variables
-dotenv.config();
-
-const app = express();
+//set env variables 
+dotenv.config(); 
+ 
+const app = express(); 
 
 
 app.use(cors())
@@ -24,14 +26,15 @@ const apolloServer = new ApolloServer({
   resolvers 
 });
 
-
 apolloServer.applyMiddleware({ app, path: '/graphql' });
 
-app.use('/', (req, res) => {
+app.use('/', (req:Request, res:Response) => {
   console.log('si')
 })
 
-app.listen(process.env.API_PORT || 2000,() => {
+app.listen(process.env.API_PORT || 2000,async() => {
+  await connect();
+  
   console.log('port')
   console.log(apolloServer.graphqlPath)
 })

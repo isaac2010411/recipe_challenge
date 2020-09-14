@@ -3,8 +3,8 @@ import { gql } from 'apollo-server-express';
 module.exports = gql`
 
   extend type Query {
-    getRecipes(id:ID!):Recipe
-    getOneRecipe:[Recipe!]
+    getRecipes:[Recipe!]
+    getOneRecipe(id:ID!):Recipe
   }
   
   type Recipe {

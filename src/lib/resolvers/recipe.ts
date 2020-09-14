@@ -1,5 +1,6 @@
-import { recipesConstatns, users } from '../../constatns';
-const uuid = require('uuid');
+import  {recipesConstatns , users } from '../../constatns';
+
+const {uuid}:any = require('uuid');
 
 
 
@@ -13,14 +14,14 @@ module.exports = {
     },
 
     //return recipeID
-    getOneRecipe: ( _ , { id }) => {
-      return recipesConstatns.find( recipe => recipe.id === id )
+    getOneRecipe: ( _:any , { id}:any) => {
+      return recipesConstatns.find( (recipe:any) => recipe.id === id )
     }
   },
 
   Mutation: {
-    createRecipe: (_, { input }) => {
-      const newRecipe = {
+    createRecipe: ( _:any , { input }:any) => {
+      const newRecipe = { 
         ...input,
         id: uuid.v4(),
         user: {
@@ -35,8 +36,8 @@ module.exports = {
   //set recipe
   Recipe: { 
     //find userid  
-    user: (parent) => {
-      return users.find( user => user.id === parent.user.id )
+    user: (parent:any) => {
+      return users.find( (user:any) => user.id === parent.user.id )
     }
   },
   

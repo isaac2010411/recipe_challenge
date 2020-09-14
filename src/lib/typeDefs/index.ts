@@ -14,7 +14,6 @@ const typeDefs = gql`
     _:String
   }
 `
-
 module.exports = [
   typeDefs,
   userTypeDef,
