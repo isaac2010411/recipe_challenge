@@ -39,26 +39,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var constatns_1 = require("../../constatns");
 var typeorm_1 = require("typeorm");
 var userEntity_1 = require("../../entities/userEntity");
 var bcryptjs_1 = require("bcryptjs");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var graphql_resolvers_1 = require("graphql-resolvers");
+var middleware_1 = require("./middleware");
+var recipeEntity_1 = require("../../entities/recipeEntity");
 module.exports = {
     Query: {
-        //return all users
-        users: function () { return constatns_1.users; },
         //return userfor id
-        user: function (_, _a) {
-            var id = _a.id;
-            return constatns_1.users.find(function (user) { return user.id === id; });
-        },
+        user: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, __, _a) {
+            var email = _a.email;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var user, error_1;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _b.trys.push([0, 2, , 3]);
+                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
+                                    .createQueryBuilder("user")
+                                    .where("user.email = :email", { email: email })
+                                    .getOne()];
+                        case 1:
+                            user = _b.sent();
+                            if (!user) {
+                                throw new Error("User not found");
+                            }
+                            return [2 /*return*/, user];
+                        case 2:
+                            error_1 = _b.sent();
+                            console.log(error_1);
+                            throw error_1;
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            });
+        }),
     },
     Mutation: {
         signUp: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var name, email, password, user, saltNumber, newUser, error_1;
+                var name, email, password, user, saltNumber, newUser, error_2;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -88,8 +111,8 @@ module.exports = {
                             _b.sent();
                             return [2 /*return*/, newUser];
                         case 4:
-                            error_1 = _b.sent();
-                            console.log(error_1);
+                            error_2 = _b.sent();
+                            console.log(error_2);
                             return [3 /*break*/, 5];
                         case 5: return [2 /*return*/];
                     }
@@ -99,7 +122,7 @@ module.exports = {
         login: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var email, password, user, isPassword, secretToken, token, error_2;
+                var email, password, user, isPassword, secretToken, token, error_3;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -130,7 +153,7 @@ module.exports = {
                                     token: token
                                 }];
                         case 4:
-                            error_2 = _b.sent();
+                            error_3 = _b.sent();
                             return [3 /*break*/, 5];
                         case 5: return [2 /*return*/];
                     }
@@ -143,8 +166,19 @@ module.exports = {
         //find all userRecipes for recipesID  
         recipes: function (_a) {
             var id = _a.id;
-            return constatns_1.recipesConstatns.filter(function (recipe) {
-                return recipe.user.id === id;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var recipes;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
+                                .createQueryBuilder("recipe")
+                                .where("recipe.user = :user", { user: id })
+                                .getMany()];
+                        case 1:
+                            recipes = _b.sent();
+                            return [2 /*return*/, recipes];
+                    }
+                });
             });
         }
     }

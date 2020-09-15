@@ -3,8 +3,7 @@ import { gql } from 'apollo-server-express';
 module.exports = gql`
 
   extend type Query {
-    users:[User!]
-    user(id:ID!): User
+    user: User
   }
 
   input singUpInputUser {
@@ -31,9 +30,9 @@ module.exports = gql`
     id:ID!
     name:String!
     email:String!
+    recipes:[Recipe!]
     createdAt:Date!
     updatedAt:Date!
-    recipes:[Recipe!]
   }
 
 `;
