@@ -20,7 +20,6 @@ var Category = /** @class */ (function () {
     ], Category.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column({ type: "varchar", length: "50" }),
-        typeorm_1.JoinColumn(),
         __metadata("design:type", String)
     ], Category.prototype, "name", void 0);
     Category = __decorate([

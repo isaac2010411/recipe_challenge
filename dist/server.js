@@ -39,14 +39,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var dotenv = require('dotenv');
 require('reflect-metadata');
-var _a = require('apollo-server-express'), ApolloServer = _a.ApolloServer, gql = _a.gql;
+var ApolloServer = require('apollo-server-express').ApolloServer;
 var cors = require('cors');
 var resolvers = require('./lib/resolvers');
 var createConnection = require('typeorm').createConnection;
 var typeDefs = require('./lib/typeDefs');
 var verifyUser = require('./helper').verifyUser;
 dotenv.config();
-var config = require('./ormconfig');
+var config = require('../ormconfig');
 console.log(config);
 //set env variables 
 var app = express();
@@ -59,15 +59,21 @@ var apolloServer = new ApolloServer({
     context: function (_a) {
         var req = _a.req;
         return __awaiter(void 0, void 0, void 0, function () {
-            var isUser;
+            var isUser, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, verifyUser(req.headers.authorization)];
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, verifyUser(req.headers.authorization)];
                     case 1:
                         isUser = _b.sent();
                         return [2 /*return*/, {
                                 email: isUser
                             }];
+                    case 2:
+                        error_1 = _b.sent();
+                        throw new Error("Loggin to continue");
+                    case 3: return [2 /*return*/];
                 }
             });
         });

@@ -20,13 +20,11 @@ module.exports = gql`
     createRecipe (input: createRecipeInput!): Recipe
   }
 
-
   input createRecipeInput{
     name:String
     description:String
     ingredients:String
     category:String
-    user:ID!
   }
 
 `;

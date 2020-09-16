@@ -40,11 +40,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
-var userEntity_1 = require("../../entities/userEntity");
 var bcryptjs_1 = require("bcryptjs");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var graphql_resolvers_1 = require("graphql-resolvers");
 var middleware_1 = require("./middleware");
+//entities
+var userEntity_1 = require("../../entities/userEntity");
 var recipeEntity_1 = require("../../entities/recipeEntity");
 module.exports = {
     Query: {
@@ -58,9 +59,7 @@ module.exports = {
                         case 0:
                             _b.trys.push([0, 2, , 3]);
                             return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .createQueryBuilder("user")
-                                    .where("user.email = :email", { email: email })
-                                    .getOne()];
+                                    .findOne({ email: email })];
                         case 1:
                             user = _b.sent();
                             if (!user) {
@@ -90,9 +89,7 @@ module.exports = {
                         case 1:
                             _b.trys.push([1, 4, , 5]);
                             return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .createQueryBuilder("user")
-                                    .where("user.email = :email", { email: email })
-                                    .getOne()];
+                                    .findOne({ email: email })];
                         case 2:
                             user = _b.sent();
                             if (user) {
@@ -131,9 +128,7 @@ module.exports = {
                         case 1:
                             _b.trys.push([1, 4, , 5]);
                             return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .createQueryBuilder("user")
-                                    .where("user.email = :email", { email: email })
-                                    .getOne()];
+                                    .findOne({ email: email })];
                         case 2:
                             user = _b.sent();
                             if (!user) {

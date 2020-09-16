@@ -11,14 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Recipe = void 0;
 var typeorm_1 = require("typeorm");
-var categoryEntity_1 = require("./categoryEntity");
 var userEntity_1 = require("./userEntity");
 var Recipe = /** @class */ (function () {
     function Recipe() {
     }
     __decorate([
-        typeorm_1.PrimaryGeneratedColumn("uuid"),
-        __metadata("design:type", Number)
+        typeorm_1.PrimaryGeneratedColumn('uuid'),
+        __metadata("design:type", String)
     ], Recipe.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column(),
@@ -33,19 +32,16 @@ var Recipe = /** @class */ (function () {
         __metadata("design:type", String)
     ], Recipe.prototype, "ingredients", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return categoryEntity_1.Category; }, function (category) { return category.name; }, {
-            eager: true,
-            cascade: true
-        }),
-        __metadata("design:type", categoryEntity_1.Category)
+        typeorm_1.Column(),
+        __metadata("design:type", String)
     ], Recipe.prototype, "category", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return userEntity_1.User; }, function (user) { return user.recipes; }),
-        typeorm_1.JoinColumn({ name: "user_id" }),
-        __metadata("design:type", Recipe)
-    ], Recipe.prototype, "recipes", void 0);
+        typeorm_1.ManyToOne(function (type) { return userEntity_1.User; }, function (user) { return user.id; }),
+        typeorm_1.JoinColumn({ name: "userId" }),
+        __metadata("design:type", userEntity_1.User)
+    ], Recipe.prototype, "user", void 0);
     Recipe = __decorate([
-        typeorm_1.Entity({ name: "recipe" })
+        typeorm_1.Entity()
     ], Recipe);
     return Recipe;
 }());

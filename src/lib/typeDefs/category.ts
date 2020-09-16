@@ -9,6 +9,14 @@ module.exports = gql`
     getOneCategory (id:ID):Category
   }
 
+  input createCategoryInut {
+    name:String!
+  }
+  
+  extend type Mutation {
+    createCategory (input: createCategoryInut!): Category
+  }
+
   type Category {
     id:ID!
     name:String!

@@ -28,17 +28,25 @@ var User = /** @class */ (function () {
         __metadata("design:type", String)
     ], User.prototype, "email", void 0);
     __decorate([
-        typeorm_1.Column({ type: "varchar", length: "45" }),
+        typeorm_1.Column({ type: "varchar", length: "250" }),
         __metadata("design:type", String)
     ], User.prototype, "password", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return recipeEntity_1.Recipe; }, function (recipe) { return recipe.id; }, {
+        typeorm_1.OneToMany(function (type) { return recipeEntity_1.Recipe; }, function (recipe) { return recipe.user; }, {
             eager: true,
             cascade: true
         }),
-        typeorm_1.JoinColumn({ name: "recipes_id" }),
+        typeorm_1.JoinColumn(),
         __metadata("design:type", Array)
     ], User.prototype, "recipes", void 0);
+    __decorate([
+        typeorm_1.CreateDateColumn(),
+        __metadata("design:type", String)
+    ], User.prototype, "createdAt", void 0);
+    __decorate([
+        typeorm_1.UpdateDateColumn(),
+        __metadata("design:type", String)
+    ], User.prototype, "updatedAt", void 0);
     User = __decorate([
         typeorm_1.Entity()
     ], User);

@@ -35,35 +35,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var dotenv = require('dotenv');
-var _a = require('apollo-server-express'), ApolloServer = _a.ApolloServer, gql = _a.gql;
+require('reflect-metadata');
+var ApolloServer = require('apollo-server-express').ApolloServer;
 var cors = require('cors');
 var resolvers = require('./lib/resolvers');
 var createConnection = require('typeorm').createConnection;
 var typeDefs = require('./lib/typeDefs');
-var config = require('../ormconfig').config;
-//set env variables 
-require('reflect-metadata');
+var verifyUser = require('./helper').verifyUser;
 dotenv.config();
+var config = require('../ormconfig');
+console.log(config);
+//set env variables 
 var app = express();
 app.use(cors());
 //middlewares
 app.use(express.json());
-//Database Conection __
-createConnection(config);
 var apolloServer = new ApolloServer({
     typeDefs: typeDefs,
-    resolvers: resolvers
+    resolvers: resolvers,
+    context: function (_a) {
+        var req = _a.req;
+        return __awaiter(void 0, void 0, void 0, function () {
+            var isUser, error_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, verifyUser(req.headers.authorization)];
+                    case 1:
+                        isUser = _b.sent();
+                        return [2 /*return*/, {
+                                email: isUser
+                            }];
+                    case 2:
+                        error_1 = _b.sent();
+                        throw new Error("Loggin to continue");
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    }
 });
-apolloServer.applyMiddleware({ app: app, path: '/graphql' });
+apolloServer.applyMiddleware({
+    app: app,
+    path: '/graphql'
+});
 app.use('/', function (req, res) {
     console.log('si');
 });
 app.listen(process.env.API_PORT || 2000, function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        console.log('port');
-        console.log(apolloServer.graphqlPath);
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0: 
+            //Database Conection __
+            return [4 /*yield*/, createConnection(config)];
+            case 1:
+                //Database Conection __
+                _a.sent();
+                console.log('port');
+                console.log(apolloServer.graphqlPath);
+                return [2 /*return*/];
+        }
     });
 }); });

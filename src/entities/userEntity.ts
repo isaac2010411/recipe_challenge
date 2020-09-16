@@ -16,11 +16,10 @@ export class User {
     @Column({type:"varchar" , length:"250"})
     password: String;
     
-    @OneToMany((type: Recipe) => Recipe, recipe => recipe.id, {
+    @OneToMany((type: Recipe) => Recipe, recipe => recipe.user, {
         eager: true,
         cascade:true
     })
-        
     @JoinColumn()
     recipes: Recipe[];
     
@@ -29,4 +28,4 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: String;
-}
+}   

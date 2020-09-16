@@ -1,10 +1,14 @@
 import { getRepository } from  'typeorm'
-import { User } from '../../entities/userEntity';
 import { compare , hashSync } from 'bcryptjs'
 import jwt from 'jsonwebtoken';
 import {combineResolvers} from 'graphql-resolvers';
-import {isAuthenticated} from './middleware'
+import { isAuthenticated } from './middleware'
+//entities
+import { User } from '../../entities/userEntity';
 import { Recipe } from '../../entities/recipeEntity';
+
+
+
 module.exports = {  
   Query: {
     //return userfor id
@@ -12,9 +16,8 @@ module.exports = {
       async (_: any, __: any, { email }: any) => {
         try {
           const user = await getRepository<User>(User)
-          .createQueryBuilder("user")
-          .where("user.email = :email", { email: email })
-          .getOne();
+          .findOne({email})
+          
           if (!user) {
             throw new Error("User not found"); 
           }
@@ -34,9 +37,7 @@ module.exports = {
       try {
 
         const user = await getRepository<User>(User)
-        .createQueryBuilder("user")
-        .where("user.email = :email", { email: email })
-        .getOne();
+        .findOne({email})
     
         if (user) {
           console.log(user)
@@ -44,6 +45,7 @@ module.exports = {
         }
 
         let saltNumber = 10;
+
         let newUser = {
           name,
           email,
@@ -64,10 +66,8 @@ module.exports = {
 
       try {
         //search user
-        const user = await getRepository<User>(User)
-          .createQueryBuilder("user")
-          .where("user.email = :email", { email: email })
-          .getOne()
+     const user = await getRepository<User>(User)
+          .findOne({email})
          
         if (!user) {
           throw new Error("user not found");
@@ -98,9 +98,8 @@ module.exports = {
     recipes: async ({ id }: any) => {
       const recipes = await getRepository<Recipe>(Recipe)
       .createQueryBuilder("recipe")
-      .where("recipe.user = :user", { user: id })
+      .where("recipe.user = :user", {user:id})
       .getMany()
-      
       return recipes;
     } 
   }

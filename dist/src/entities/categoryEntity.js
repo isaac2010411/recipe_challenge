@@ -23,7 +23,7 @@ var Category = /** @class */ (function () {
         __metadata("design:type", String)
     ], Category.prototype, "name", void 0);
     Category = __decorate([
-        typeorm_1.Entity({ name: "category" })
+        typeorm_1.Entity()
     ], Category);
     return Category;
 }());

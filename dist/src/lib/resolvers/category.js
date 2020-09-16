@@ -13,7 +13,12 @@ module.exports = {
             return categories.find(function (category) { return category.name === id; });
         }
     },
-    Mutation: {},
+    Mutation: {
+        createCategory: function (_, _a) {
+            var name = _a.name;
+            console.log(name);
+        }
+    },
     //set category recipes
     Category: {
         //find all recipes name  

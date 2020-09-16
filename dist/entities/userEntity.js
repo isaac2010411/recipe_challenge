@@ -32,7 +32,7 @@ var User = /** @class */ (function () {
         __metadata("design:type", String)
     ], User.prototype, "password", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return recipeEntity_1.Recipe; }, function (recipe) { return recipe.id; }, {
+        typeorm_1.OneToMany(function (type) { return recipeEntity_1.Recipe; }, function (recipe) { return recipe.user; }, {
             eager: true,
             cascade: true
         }),

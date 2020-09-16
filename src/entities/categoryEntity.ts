@@ -1,4 +1,5 @@
 import { Entity , PrimaryGeneratedColumn, Column, JoinColumn } from "typeorm";
+import { Recipe } from "./recipeEntity";
 
 @Entity()
 export class Category {
@@ -7,6 +8,7 @@ export class Category {
     id: number;
 
     @Column({ type: "varchar", length: "50" })
-    @JoinColumn()
     name: string;
+
+
 }
