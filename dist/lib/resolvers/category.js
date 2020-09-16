@@ -39,7 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 var categoryEntity_1 = require("../../entities/categoryEntity");
 var recipeEntity_1 = require("../../entities/recipeEntity");
-var _a = require('./../../constatns'), recipesConstatns = _a.recipesConstatns, categories = _a.categories;
 // CATEGORY RESOLVERS AND MUTATIONS
 module.exports = {
     Query: {
@@ -49,7 +48,7 @@ module.exports = {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                            .find()];
+                            .find({ relations: ["recipes"] })];
                     case 1:
                         categories = _a.sent();
                         return [2 /*return*/, categories];
@@ -107,19 +106,29 @@ module.exports = {
     //set category recipes
     Category: {
         //find all recipes name  
-        recipes: function (parent) { return __awaiter(void 0, void 0, void 0, function () {
-            var name, recipes;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        name = parent.name;
-                        return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                .findOne({ category: name }, { relations: ["recipes"] })];
-                    case 1:
-                        recipes = _a.sent();
-                        return [2 /*return*/, recipes];
-                }
+        recipes: function (_a) {
+            var id = _a.id;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var recipes;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
+                                .find({ relations: ["user"] })
+                            // .createQueryBuilder("recipe")
+                            //   .where("recipe.category = :category"
+                            //   ,{ category: id })
+                            // .getMany()
+                        ];
+                        case 1:
+                            recipes = _b.sent();
+                            // .createQueryBuilder("recipe")
+                            //   .where("recipe.category = :category"
+                            //   ,{ category: id })
+                            // .getMany()
+                            return [2 /*return*/, recipes];
+                    }
+                });
             });
-        }); }
+        },
     },
 };

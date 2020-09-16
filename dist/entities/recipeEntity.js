@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Recipe = void 0;
 var typeorm_1 = require("typeorm");
+var categoryEntity_1 = require("./categoryEntity");
 var userEntity_1 = require("./userEntity");
 var Recipe = /** @class */ (function () {
     function Recipe() {
@@ -32,8 +33,9 @@ var Recipe = /** @class */ (function () {
         __metadata("design:type", String)
     ], Recipe.prototype, "ingredients", void 0);
     __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
+        typeorm_1.ManyToOne(function (type) { return categoryEntity_1.Category; }, function (category) { return category.recipes; }),
+        typeorm_1.JoinColumn(),
+        __metadata("design:type", categoryEntity_1.Category)
     ], Recipe.prototype, "category", void 0);
     __decorate([
         typeorm_1.ManyToOne(function (type) { return userEntity_1.User; }, function (user) { return user.id; }),

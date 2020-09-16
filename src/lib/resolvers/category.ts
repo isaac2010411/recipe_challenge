@@ -2,23 +2,21 @@ import { getRepository } from "typeorm";
 import { Category } from "../../entities/categoryEntity";
 import { Recipe } from "../../entities/recipeEntity";
 
-const { recipesConstatns, categories } = require('./../../constatns')
-
 // CATEGORY RESOLVERS AND MUTATIONS
 
 module.exports = {
   Query: { 
     //return all recipes
     getCategories:async () => {
-      let categories = await getRepository(Category)
-      .find()
+      let categories = await getRepository<Category>(Category)
+      .find({relations:["recipes"]})
       return categories ;
     },
 
     //return recipeID
-    getOneCategory:async (_: any, { id }: any) => {
+    getOneCategory: async (_: any, { id }: any) => {
       let category = await getRepository(Category)
-        .findOne({ id })
+      .findOne({ id })
       return category;
     }
   },
@@ -43,11 +41,15 @@ module.exports = {
   //set category recipes
   Category: { 
     //find all recipes name  
-    recipes: async (parent: any) => {
-      let {name} = parent;
-      let recipes = await getRepository(Recipe)
-      .find({category:name})
+    recipes: async ({ id }: any) => {
+      const recipes = await getRepository<Recipe>(Recipe)
+        .find({relations:["user"]})
+      // .createQueryBuilder("recipe")
+      //   .where("recipe.category = :category"
+      //   ,{ category: id })
+      // .getMany()
       return recipes;
-    }
+    },
+    
   },
 }; 

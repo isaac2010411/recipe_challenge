@@ -4,6 +4,7 @@ import {isAuthenticated} from './middleware'
 import { User } from '../../entities/userEntity';
 import  { v4 } from 'uuid'
 import { Recipe } from '../../entities/recipeEntity';
+import { Category } from '../../entities/categoryEntity';
 
 
 // RECIPE RESOLVERS  AND MUTATIONS
@@ -30,25 +31,44 @@ module.exports = {
 
   Mutation: {
     createRecipe:
-      combineResolvers( isAuthenticated,
+      combineResolvers(isAuthenticated,
+        
+        async (_: any, { input }: any, { email }: any) => {
+        
+        //search category  name
+          let category = await getRepository<Category>(Category)
+            .findOne({ name: input.category });
+            
+        //search user
+          const user = await getRepository<User>(User)
+            .findOne({ email });
+          console.log(user)
 
-      async (_: any, { input }: any, { email }: any) => {
- 
-      const user = await getRepository<User>(User)
-      .findOne({email})
+        if (user) {
 
-      if (user) {
-        let recipe = await getRepository<Recipe>(Recipe)
-          .create({
-            ...input,
+          if (!category) {
+            //create new  category
+            category = new Category()
+            category.id = v4()
+            category.name = input.category
+            await getRepository<Category>(Category)
+            .save(category)
+          }
+          
+    
+          let newrecipe = await getRepository<Recipe>(Recipe)
+            .create({
             id: v4(),
+            ...input,
+            category,
             user: user?.id
-          });
+          }); 
         
-        await getRepository(Recipe)
-        .save(recipe);
-        
-        return recipe; 
+
+          const result = await getRepository(Recipe)
+          .save(newrecipe);
+
+        return result; 
         }
         
       throw new Error("Error Login");

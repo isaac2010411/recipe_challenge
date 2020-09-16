@@ -11,17 +11,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Category = void 0;
 var typeorm_1 = require("typeorm");
+var recipeEntity_1 = require("./recipeEntity");
 var Category = /** @class */ (function () {
     function Category() {
     }
+    ;
     __decorate([
         typeorm_1.PrimaryGeneratedColumn("uuid"),
-        __metadata("design:type", Number)
+        __metadata("design:type", String)
     ], Category.prototype, "id", void 0);
     __decorate([
         typeorm_1.Column({ type: "varchar", length: "50" }),
         __metadata("design:type", String)
     ], Category.prototype, "name", void 0);
+    __decorate([
+        typeorm_1.OneToMany(function (type) { return recipeEntity_1.Recipe; }, function (recipe) { return recipe.category; }, {
+            cascade: true,
+            eager: true
+        }),
+        typeorm_1.JoinColumn({ name: "recipes_id" }),
+        __metadata("design:type", Array)
+    ], Category.prototype, "recipes", void 0);
     Category = __decorate([
         typeorm_1.Entity()
     ], Category);

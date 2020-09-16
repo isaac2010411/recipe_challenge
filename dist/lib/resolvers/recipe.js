@@ -53,6 +53,7 @@ var middleware_1 = require("./middleware");
 var userEntity_1 = require("../../entities/userEntity");
 var uuid_1 = require("uuid");
 var recipeEntity_1 = require("../../entities/recipeEntity");
+var categoryEntity_1 = require("../../entities/categoryEntity");
 // RECIPE RESOLVERS  AND MUTATIONS
 module.exports = {
     Query: {
@@ -92,24 +93,39 @@ module.exports = {
             var input = _a.input;
             var email = _b.email;
             return __awaiter(void 0, void 0, void 0, function () {
-                var user, recipe;
+                var category, user, newrecipe, result;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
-                        case 0: return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                .findOne({ email: email })];
+                        case 0: return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
+                                .findOne({ name: input.category })];
                         case 1:
-                            user = _c.sent();
-                            if (!user) return [3 /*break*/, 4];
-                            return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                    .create(__assign(__assign({}, input), { id: uuid_1.v4(), user: user === null || user === void 0 ? void 0 : user.id }))];
+                            category = _c.sent();
+                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
+                                    .findOne({ email: email })];
                         case 2:
-                            recipe = _c.sent();
-                            return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                    .save(recipe)];
+                            user = _c.sent();
+                            console.log(user);
+                            if (!user) return [3 /*break*/, 7];
+                            if (!!category) return [3 /*break*/, 4];
+                            //create new  category
+                            category = new categoryEntity_1.Category();
+                            category.id = uuid_1.v4();
+                            category.name = input.category;
+                            return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
+                                    .save(category)];
                         case 3:
                             _c.sent();
-                            return [2 /*return*/, recipe];
-                        case 4: throw new Error("Error Login");
+                            _c.label = 4;
+                        case 4: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
+                                .create(__assign(__assign({ id: uuid_1.v4() }, input), { category: category, user: user === null || user === void 0 ? void 0 : user.id }))];
+                        case 5:
+                            newrecipe = _c.sent();
+                            return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
+                                    .save(newrecipe)];
+                        case 6:
+                            result = _c.sent();
+                            return [2 /*return*/, result];
+                        case 7: throw new Error("Error Login");
                     }
                 });
             });
