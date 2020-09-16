@@ -4,6 +4,7 @@ import { User } from "./userEntity";
 
 
 @Entity()
+    
 export class Recipe {
 
     @PrimaryGeneratedColumn('uuid')
@@ -19,7 +20,7 @@ export class Recipe {
     ingredients: string;
 
     @ManyToOne(type => Category, category => category.recipes)
-    @JoinColumn()
+    @JoinColumn({name:"categoryId"})
     category: Category;
 
     @ManyToOne((type: any) => User, (user: User) => user.id)

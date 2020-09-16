@@ -14,8 +14,8 @@ module.exports = {
     //return all recipes
     getRecipes: async () => {
       let recipes = await getRepository<Recipe>(Recipe)
-        .find({ relations: ["user"] })
-      console.log(recipes)
+        .find({ relations: ["user","category"] })
+     
       return recipes;
     },
 
@@ -23,7 +23,7 @@ module.exports = {
     getOneRecipe: async (_: any, { id }: any) => {
       let recipe = await getRepository<Recipe>(Recipe)
         .findOne(id ,
-          { relations: ["user"]}
+          { relations: ["user","category"]}
         )
       return recipe;
     }
@@ -78,15 +78,20 @@ module.exports = {
   //set recipe
   Recipe: { 
     //find userid  
-    user: async ( { user }: any , paramer:any) => {
-      console.log(user)
-      console.log(paramer)
+    user: async ( { user }: any) => {
+    
     const propietary = await getRepository<User>(User)
       .findOne(user.id,
         { relations: ["recipes"] }
       )
-      console.log(propietary)
+      
     return propietary;
+    },
+    category: async ({ id }: any) => {
+      const category = await getRepository<Recipe>(Recipe)
+      .findOne(id,{relations:["category"]})
+      console.log(category)
+      return category
     }
   },
   

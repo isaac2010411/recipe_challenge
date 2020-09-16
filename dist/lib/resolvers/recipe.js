@@ -63,10 +63,9 @@ module.exports = {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                            .find({ relations: ["user"] })];
+                            .find({ relations: ["user", "category"] })];
                     case 1:
                         recipes = _a.sent();
-                        console.log(recipes);
                         return [2 /*return*/, recipes];
                 }
             });
@@ -134,21 +133,35 @@ module.exports = {
     //set recipe
     Recipe: {
         //find userid  
-        user: function (_a, paramer) {
+        user: function (_a) {
             var user = _a.user;
             return __awaiter(void 0, void 0, void 0, function () {
                 var propietary;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0:
-                            console.log(user);
-                            console.log(paramer);
-                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .findOne(user.id, { relations: ["recipes"] })];
+                        case 0: return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
+                                .findOne(user.id, { relations: ["recipes"] })];
                         case 1:
                             propietary = _b.sent();
-                            console.log(propietary);
                             return [2 /*return*/, propietary];
+                    }
+                });
+            });
+        },
+        category: function (_a) {
+            var id = _a.id;
+            return __awaiter(void 0, void 0, void 0, function () {
+                var category;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            console.log(id);
+                            return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
+                                    .findOne(id, { relations: ["category"] })];
+                        case 1:
+                            category = _b.sent();
+                            console.log(category);
+                            return [2 /*return*/, category];
                     }
                 });
             });

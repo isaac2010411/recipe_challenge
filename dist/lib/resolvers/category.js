@@ -113,18 +113,9 @@ module.exports = {
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                .find({ relations: ["user"] })
-                            // .createQueryBuilder("recipe")
-                            //   .where("recipe.category = :category"
-                            //   ,{ category: id })
-                            // .getMany()
-                        ];
+                                .find({ relations: ["user"] })];
                         case 1:
                             recipes = _b.sent();
-                            // .createQueryBuilder("recipe")
-                            //   .where("recipe.category = :category"
-                            //   ,{ category: id })
-                            // .getMany()
                             return [2 /*return*/, recipes];
                     }
                 });

@@ -44,10 +44,6 @@ module.exports = {
     recipes: async ({ id }: any) => {
       const recipes = await getRepository<Recipe>(Recipe)
         .find({relations:["user"]})
-      // .createQueryBuilder("recipe")
-      //   .where("recipe.category = :category"
-      //   ,{ category: id })
-      // .getMany()
       return recipes;
     },
     
