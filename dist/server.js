@@ -56,25 +56,20 @@ app.use(express.json());
 var apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
+    playground: true,
     context: function (_a) {
         var req = _a.req;
         return __awaiter(void 0, void 0, void 0, function () {
-            var isUser, error_1;
+            var isUser;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, verifyUser(req.headers.authorization)];
+                    case 0: return [4 /*yield*/, verifyUser(req.headers.authorization)];
                     case 1:
                         isUser = _b.sent();
                         return [2 /*return*/, {
                                 email: isUser.email,
                                 isLogged: isUser.user
                             }];
-                    case 2:
-                        error_1 = _b.sent();
-                        throw new Error("Loggin to continue");
-                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -92,7 +87,7 @@ app.use('/', function (req, res) { return __awaiter(void 0, void 0, void 0, func
     });
 }); });
 app.listen(port, function () { return __awaiter(void 0, void 0, void 0, function () {
-    var error_2;
+    var error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -104,7 +99,7 @@ app.listen(port, function () { return __awaiter(void 0, void 0, void 0, function
                 _a.sent();
                 return [3 /*break*/, 3];
             case 2:
-                error_2 = _a.sent();
+                error_1 = _a.sent();
                 throw new Error("Error database connect");
             case 3: return [2 /*return*/];
         }

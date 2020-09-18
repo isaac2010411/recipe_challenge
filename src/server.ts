@@ -27,16 +27,11 @@ const apolloServer = new ApolloServer({
   resolvers,
   playground: true,
   context: async ({ req }: ExpressContext) => {
-    try {
       const isUser = await verifyUser(req.headers.authorization);
       return {
         email: isUser.email,
         isLogged:isUser.user
       }
-    } catch (error) {
-      throw new Error("Loggin to continue");
-      
-    }
     }
 });
 const port = process.env.PORT || 3000;
