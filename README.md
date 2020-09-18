@@ -108,7 +108,7 @@ Figueroa Isaac
 ## Aplication Structure
 
 
-
+```
 
 ├── dist                     # Distribution folder
 ├── node_modules             # Modules node
@@ -123,5 +123,7 @@ Figueroa Isaac
 │               
 ├── server                   # Server application start point
 ├── ormconfig                # Config typeOrm 
-│── tsconfig                 # Config Typescript compile
+│── tsconfig                 # Config Typescript
 
+
+```
