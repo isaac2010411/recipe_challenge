@@ -1,4 +1,5 @@
 import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
+import { Request, Response } from "express";
 const express = require('express');
 const dotenv = require('dotenv');
 require('reflect-metadata');
@@ -44,14 +45,11 @@ apolloServer.applyMiddleware({
   path: '/graphql'
 });
 
-app.use('/', (req:Request, res:Response) => {
-  console.log('si')
+app.use('/', async (req: Request, res: Response) => {
+  res.json({path:`${apolloServer.graphqlPath}`})
 })
 
-app.listen(process.env.API_PORT || 2000, async () => {
+app.listen( process.env|| 3000, async () => {
   //Database Conection __
-
   await createConnection(config);
-  console.log('port')
-  console.log(apolloServer.graphqlPath)
 })

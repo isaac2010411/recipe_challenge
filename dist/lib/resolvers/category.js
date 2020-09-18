@@ -36,12 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//Modules
 var graphql_resolvers_1 = require("graphql-resolvers");
-var typeorm_1 = require("typeorm");
-var categoryEntity_1 = require("../../entities/categoryEntity");
-var categoryStore_1 = require("../store/categoryStore");
+//Middleware
 var middleware_1 = require("./middleware");
-// CATEGORY RESOLVERS AND MUTATIONS
+//Store
+var categoryStore_1 = require("../store/categoryStore");
 module.exports = {
     Query: {
         //return all recipes
@@ -63,6 +63,7 @@ module.exports = {
         })
     },
     Mutation: {
+        //create category
         createCategory: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
@@ -71,27 +72,20 @@ module.exports = {
                     switch (_b.label) {
                         case 0:
                             name = input.name;
-                            return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                                    .findOne({ name: name })];
+                            return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryByName(name)];
                         case 1:
                             isCategory = _b.sent();
-                            if (!!isCategory) return [3 /*break*/, 4];
-                            return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                                    .create({
-                                    name: name,
-                                })];
+                            if (!!isCategory) return [3 /*break*/, 3];
+                            return [4 /*yield*/, categoryStore_1.CategoryStore.createNewCategory(name)];
                         case 2:
                             isCategory = _b.sent();
-                            return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                                    .save(isCategory)];
-                        case 3:
-                            _b.sent();
-                            _b.label = 4;
-                        case 4: return [2 /*return*/, isCategory];
+                            _b.label = 3;
+                        case 3: return [2 /*return*/, isCategory];
                     }
                 });
             });
         }),
+        //update recipe
         updateCategory: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, middleware_1.isCategory, function (_, data) { return __awaiter(void 0, void 0, void 0, function () {
             var categoryUpdate, error_1;
             return __generator(this, function (_a) {
@@ -112,6 +106,7 @@ module.exports = {
                 }
             });
         }); }),
+        //delete recipe
         deleteCategory: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, middleware_1.isCategory, function (_, _a) {
             var id = _a.id;
             return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {

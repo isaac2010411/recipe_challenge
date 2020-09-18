@@ -84,10 +84,13 @@ apolloServer.applyMiddleware({
     app: app,
     path: '/graphql'
 });
-app.use('/', function (req, res) {
-    console.log('si');
-});
-app.listen(process.env.API_PORT || 2000, function () { return __awaiter(void 0, void 0, void 0, function () {
+app.use('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        res.json({ path: "" + apolloServer.graphqlPath });
+        return [2 /*return*/];
+    });
+}); });
+app.listen(process.env || 3000, function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: 
@@ -96,8 +99,6 @@ app.listen(process.env.API_PORT || 2000, function () { return __awaiter(void 0, 
             case 1:
                 //Database Conection __
                 _a.sent();
-                console.log('port');
-                console.log(apolloServer.graphqlPath);
                 return [2 /*return*/];
         }
     });

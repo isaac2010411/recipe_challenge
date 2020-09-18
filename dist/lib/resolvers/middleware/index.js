@@ -37,7 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isCategory = exports.isOwnerRecipe = exports.isAuthenticated = void 0;
+//module
 var graphql_resolvers_1 = require("graphql-resolvers");
+//Store
 var categoryStore_1 = require("../../store/categoryStore");
 var recipeStore_1 = require("../../store/recipeStore");
 exports.isAuthenticated = function (_, __, _a) {

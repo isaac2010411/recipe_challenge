@@ -36,8 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//module
 var graphql_resolvers_1 = require("graphql-resolvers");
+//middleware
 var middleware_1 = require("./middleware");
+//store
 var recipeStore_1 = require("../store/recipeStore");
 var categoryStore_1 = require("../store/categoryStore");
 var userStore_1 = require("../store/userStore");
@@ -80,6 +83,7 @@ module.exports = {
                 case 1: return [2 /*return*/, _a.sent()];
             }
         }); }); }),
+        //create recipe
         createRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, _a, _b) {
             var input = _a.input;
             var email = _b.email;
@@ -114,7 +118,7 @@ module.exports = {
             });
         })
     },
-    //set recipe
+    //set recipe schema
     Recipe: {
         //find userid  
         user: function (_a) {

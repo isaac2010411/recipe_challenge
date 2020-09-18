@@ -39,9 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//modules
 var bcryptjs_1 = require("bcryptjs");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var graphql_resolvers_1 = require("graphql-resolvers");
+//middleware
 var middleware_1 = require("./middleware");
 //Stores 
 var userStore_1 = require("../store/userStore");
@@ -65,6 +67,7 @@ module.exports = {
         }),
     },
     Mutation: {
+        //singUp 
         signUp: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
@@ -79,6 +82,7 @@ module.exports = {
                 });
             });
         },
+        //Login
         login: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
