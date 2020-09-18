@@ -10,11 +10,8 @@ export class Category {
     @Column({ type: "varchar", length: "50" })
     name: string;
 
-    @OneToMany(type => Recipe, recipe => recipe.category, {
-        cascade: true,
-        eager: true
-    })
+    @OneToMany(type => Recipe, recipe => recipe.category , {onDelete:"CASCADE"})
     @JoinColumn({ name: "recipes_id" })
     recipes: Recipe[];
-;
+
 }

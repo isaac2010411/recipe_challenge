@@ -36,34 +36,80 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserStore = void 0;
+var bcryptjs_1 = require("bcryptjs");
 var typeorm_1 = require("typeorm");
-var userEntity_1 = require("../entities/userEntity");
-var jwt = require("jsonwebtoken");
-module.exports = {
-    verifyUser: function (authorization) { return __awaiter(void 0, void 0, void 0, function () {
-        var email, token, payload, user, error_1;
+var userEntity_1 = require("../../entities/userEntity");
+exports.UserStore = {
+    findUserByEmail: function (email) { return __awaiter(void 0, void 0, void 0, function () {
+        var repository, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    email = void 0;
-                    token = authorization ? authorization.split(' ')[1] : null;
-                    if (token) {
-                        payload = jwt.verify(token, process.env.SECRET_TOKEN_KEY || "mySecret");
-                        email = payload.email;
-                    }
                     return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
                             .findOne({ email: email })];
                 case 1:
-                    user = _a.sent();
-                    return [2 /*return*/, {
-                            email: email,
-                            user: user
-                        }];
+                    repository = _a.sent();
+                    return [2 /*return*/, repository];
                 case 2:
                     error_1 = _a.sent();
-                    throw new Error("Login to continue");
+                    throw new Error("User not found , incorrected email");
                 case 3: return [2 /*return*/];
+            }
+        });
+    }); },
+    findUserById: function (id) { return __awaiter(void 0, void 0, void 0, function () {
+        var repository, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
+                            .findOne({ id: id }, { relations: ["recipes"] })];
+                case 1:
+                    repository = _a.sent();
+                    return [2 /*return*/, repository];
+                case 2:
+                    error_2 = _a.sent();
+                    throw new Error("User not found , incorrected id");
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); },
+    createNewUser: function (userData) { return __awaiter(void 0, void 0, void 0, function () {
+        var name, email, password, user, saltNumber, newUser, error_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    name = userData.name, email = userData.email, password = userData.password;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
+                            .findOne({ email: email })];
+                case 2:
+                    user = _a.sent();
+                    if (user) {
+                        console.log(user);
+                        throw new Error("Email already in use");
+                    }
+                    saltNumber = 10;
+                    newUser = {
+                        name: name,
+                        email: email,
+                        password: bcryptjs_1.hashSync(password, saltNumber)
+                    };
+                    return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
+                            .save(newUser)];
+                case 3:
+                    _a.sent();
+                    return [2 /*return*/, newUser];
+                case 4:
+                    error_3 = _a.sent();
+                    console.log(error_3);
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
             }
         });
     }); }

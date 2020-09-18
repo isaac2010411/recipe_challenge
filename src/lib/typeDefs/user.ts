@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-express';
 module.exports = gql`
 
   extend type Query {
-    user: User
+    getMyRecipes: User
   }
 
   input singUpInputUser {
@@ -18,8 +18,8 @@ module.exports = gql`
   }
 
   extend type Mutation {
-    signUp(input : singUpInputUser!):User
-    login(input :loginInputUser!):Token
+    signUp(input: singUpInputUser!):User
+    login(input:loginInputUser!):Token
   }
 
   type Token {

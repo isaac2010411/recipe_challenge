@@ -28,7 +28,8 @@ const apolloServer = new ApolloServer({
     try {
       const isUser = await verifyUser(req.headers.authorization);
       return {
-        email:isUser
+        email: isUser.email,
+        isLogged:isUser.user
       }
     } catch (error) {
       throw new Error("Loggin to continue");

@@ -15,7 +15,6 @@ var recipeEntity_1 = require("./recipeEntity");
 var Category = /** @class */ (function () {
     function Category() {
     }
-    ;
     __decorate([
         typeorm_1.PrimaryGeneratedColumn("uuid"),
         __metadata("design:type", String)
@@ -25,10 +24,7 @@ var Category = /** @class */ (function () {
         __metadata("design:type", String)
     ], Category.prototype, "name", void 0);
     __decorate([
-        typeorm_1.OneToMany(function (type) { return recipeEntity_1.Recipe; }, function (recipe) { return recipe.category; }, {
-            cascade: true,
-            eager: true
-        }),
+        typeorm_1.OneToMany(function (type) { return recipeEntity_1.Recipe; }, function (recipe) { return recipe.category; }, { onDelete: "CASCADE" }),
         typeorm_1.JoinColumn({ name: "recipes_id" }),
         __metadata("design:type", Array)
     ], Category.prototype, "recipes", void 0);

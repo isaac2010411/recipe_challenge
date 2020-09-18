@@ -33,7 +33,7 @@ var Recipe = /** @class */ (function () {
         __metadata("design:type", String)
     ], Recipe.prototype, "ingredients", void 0);
     __decorate([
-        typeorm_1.ManyToOne(function (type) { return categoryEntity_1.Category; }, function (category) { return category.recipes; }),
+        typeorm_1.ManyToOne(function (type) { return categoryEntity_1.Category; }, function (category) { return category.recipes; }, { cascade: false }),
         typeorm_1.JoinColumn({ name: "categoryId" }),
         __metadata("design:type", categoryEntity_1.Category)
     ], Recipe.prototype, "category", void 0);

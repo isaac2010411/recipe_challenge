@@ -1,10 +1,13 @@
-import { getRepository } from 'typeorm';
-import {combineResolvers} from 'graphql-resolvers';
-import {isAuthenticated} from './middleware'
-import { User } from '../../entities/userEntity';
-import  { v4 } from 'uuid'
-import { Recipe } from '../../entities/recipeEntity';
-import { Category } from '../../entities/categoryEntity';
+//module
+import { combineResolvers } from 'graphql-resolvers';
+
+//middleware
+import { isAuthenticated, isOwnerRecipe } from './middleware'
+
+//store
+import { RecipeStore } from '../store/recipeStore';
+import { CategoryStore } from '../store/categoryStore';
+import { UserStore } from '../store/userStore';
 
 
 // RECIPE RESOLVERS  AND MUTATIONS
@@ -12,87 +15,47 @@ import { Category } from '../../entities/categoryEntity';
 module.exports = { 
   Query: {
     //return all recipes
-    getRecipes: async () => {
-      let recipes = await getRepository<Recipe>(Recipe)
-        .find({ relations: ["user","category"] })
-     
-      return recipes;
-    },
+    getRecipes: combineResolvers(isAuthenticated,async ()=> await RecipeStore.findAllRecipes()),
 
     //return recipeID
-    getOneRecipe: async (_: any, { id }: any) => {
-      let recipe = await getRepository<Recipe>(Recipe)
-        .findOne(id ,
-          { relations: ["user","category"]}
-        )
-      return recipe;
-    }
+    getOneRecipe: combineResolvers(isAuthenticated,
+      async (_: any, { id }: any) => await RecipeStore.findRecipeById(id))
   },
 
   Mutation: {
+     //if user ownerRecipe ..delete recipe 
+    deleteRecipe: combineResolvers(isAuthenticated, isOwnerRecipe,
+    async (_: any, { id }: any) => await RecipeStore.deleteRecipe(id)),
+    
+    //if user ownerRecipe ..update recipe 
+    updateRecipe:combineResolvers( isAuthenticated , isOwnerRecipe,
+      async (_: any, data: any) => await RecipeStore.updateRecipe(data)),
+    
+    //create recipe
     createRecipe:
       combineResolvers(isAuthenticated,
-        
         async (_: any, { input }: any, { email }: any) => {
+          try {
+            let category = await CategoryStore.findCategoryByName(input.category);
+            //search user
+            const user = await UserStore.findUserByEmail(email);
         
-        //search category  name
-          let category = await getRepository<Category>(Category)
-            .findOne({ name: input.category });
-            
-        //search user
-          const user = await getRepository<User>(User)
-            .findOne({ email });
-          console.log(user)
-
-        if (user) {
-
-          if (!category) {
-            //create new  category
-            category = new Category()
-            category.id = v4()
-            category.name = input.category
-            await getRepository<Category>(Category)
-            .save(category)
-          }
-          
-    
-          let newrecipe = await getRepository<Recipe>(Recipe)
-            .create({
-            id: v4(),
-            ...input,
-            category,
-            user: user?.id
-          }); 
-        
-
-          const result = await getRepository(Recipe)
-          .save(newrecipe);
-
-        return result; 
+            if (user) {
+              if (!category) {
+                category = await CategoryStore.createNewCategory(input.category);
+              }
+            }
+            let newRecipe =await RecipeStore.createNewRecipe(category, input, user)
+            return newRecipe;
+          } catch (error) {
+            throw new Error("Error to create recipe");
         }
-        
-      throw new Error("Error Login");
-        
     })
   },
-  //set recipe
+  //set recipe schema
   Recipe: { 
     //find userid  
-    user: async ( { user }: any) => {
-    
-    const propietary = await getRepository<User>(User)
-      .findOne(user.id,
-        { relations: ["recipes"] }
-      )
-      
-    return propietary;
-    },
-    category: async ({ id }: any) => {
-      const category = await getRepository<Recipe>(Recipe)
-      .findOne(id,{relations:["category"]})
-      console.log(category)
-      return category
-    }
+    user: async ({ user }: any) => await UserStore.findUserById(user.id) ,
+    category: async ({ category }: any) =>await CategoryStore.findCategoryById(category.id)
   },
-  
 }; 

@@ -1,51 +1,54 @@
-import { getRepository } from "typeorm";
-import { Category } from "../../entities/categoryEntity";
-import { Recipe } from "../../entities/recipeEntity";
+//Modules
+import { combineResolvers } from "graphql-resolvers";
+//Middleware
+import { isAuthenticated, isCategory } from "./middleware";
+//Store
+import { CategoryStore } from "../store/categoryStore";
 
-// CATEGORY RESOLVERS AND MUTATIONS
 
 module.exports = {
   Query: { 
     //return all recipes
-    getCategories:async () => {
-      let categories = await getRepository<Category>(Category)
-      .find({relations:["recipes"]})
-      return categories ;
-    },
+    getCategories: combineResolvers(isAuthenticated,
+      async () =>await CategoryStore.findAllCategories()),
 
     //return recipeID
-    getOneCategory: async (_: any, { id }: any) => {
-      let category = await getRepository(Category)
-      .findOne({ id })
-      return category;
-    }
+    getOneCategory: combineResolvers( isAuthenticated,
+      async (_: any, { id }: any) => await CategoryStore.findCategoryById(id))
   },
 
   Mutation: {
-    createCategory:async (_: any, { input }: any) => {
+    //create category
+    createCategory: combineResolvers(isAuthenticated,
+      async (_: any, { input }: any) => {
       const { name } = input;
-      let isCategory = await getRepository(Category)
-      .findOne({ name })
-      
+      let isCategory = await CategoryStore.findCategoryByName(name)
       if (!isCategory) {
-         isCategory = await getRepository<Category>(Category)
-        .create({
-          name,
-      })
-      await getRepository(Category)
-        .save(isCategory);
+         isCategory = await CategoryStore.createNewCategory(name)
       }
       return isCategory;
-    }
+      }),
+    //update recipe
+    updateCategory: combineResolvers(isAuthenticated,isCategory,
+      async (_: any, data: any) => {
+        console.log(data)
+        try {
+          let categoryUpdate = await CategoryStore.updateCategory(data)
+          return categoryUpdate
+        } catch (error) {
+          throw new Error(`${error}`);
+        }
+      }
+    ),
+    //delete recipe
+    deleteCategory: combineResolvers(isAuthenticated,isCategory,
+      async (_: any, { id }: any) => await CategoryStore.deleteCategory(id))
   }, 
   //set category recipes
   Category: { 
     //find all recipes name  
-    recipes: async ({ id }: any) => {
-      const recipes = await getRepository<Recipe>(Recipe)
-        .find({relations:["user"]})
-      return recipes;
+    recipes: async (param: any) => {
+     return await CategoryStore.findRecipesByCategory(param.id)
     },
-    
   },
 }; 

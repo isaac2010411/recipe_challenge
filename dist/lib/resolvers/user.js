@@ -39,38 +39,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var typeorm_1 = require("typeorm");
 var bcryptjs_1 = require("bcryptjs");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var graphql_resolvers_1 = require("graphql-resolvers");
 var middleware_1 = require("./middleware");
-//entities
-var userEntity_1 = require("../../entities/userEntity");
-var recipeEntity_1 = require("../../entities/recipeEntity");
+//Stores 
+var userStore_1 = require("../store/userStore");
+var recipeStore_1 = require("../store/recipeStore");
 module.exports = {
     Query: {
         //return userfor id
-        user: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, __, _a) {
+        getMyRecipes: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, __, _a) {
             var email = _a.email;
             return __awaiter(void 0, void 0, void 0, function () {
-                var user, error_1;
+                var user;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0:
-                            _b.trys.push([0, 2, , 3]);
-                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .findOne({ email: email })];
+                        case 0: return [4 /*yield*/, userStore_1.UserStore.findUserByEmail(email)];
                         case 1:
                             user = _b.sent();
-                            if (!user) {
-                                throw new Error("User not found");
-                            }
                             return [2 /*return*/, user];
-                        case 2:
-                            error_1 = _b.sent();
-                            console.log(error_1);
-                            throw error_1;
-                        case 3: return [2 /*return*/];
                     }
                 });
             });
@@ -80,38 +68,13 @@ module.exports = {
         signUp: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var name, email, password, user, saltNumber, newUser, error_2;
+                var newUser;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0:
-                            name = input.name, email = input.email, password = input.password;
-                            _b.label = 1;
+                        case 0: return [4 /*yield*/, userStore_1.UserStore.createNewUser(input)];
                         case 1:
-                            _b.trys.push([1, 4, , 5]);
-                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .findOne({ email: email })];
-                        case 2:
-                            user = _b.sent();
-                            if (user) {
-                                console.log(user);
-                                throw new Error("Email already in use");
-                            }
-                            saltNumber = 10;
-                            newUser = {
-                                name: name,
-                                email: email,
-                                password: bcryptjs_1.hashSync(password, saltNumber)
-                            };
-                            typeorm_1.getRepository(userEntity_1.User).create(newUser);
-                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User).save(newUser)];
-                        case 3:
-                            _b.sent();
+                            newUser = _b.sent();
                             return [2 /*return*/, newUser];
-                        case 4:
-                            error_2 = _b.sent();
-                            console.log(error_2);
-                            return [3 /*break*/, 5];
-                        case 5: return [2 /*return*/];
                     }
                 });
             });
@@ -119,7 +82,7 @@ module.exports = {
         login: function (_, _a) {
             var input = _a.input;
             return __awaiter(void 0, void 0, void 0, function () {
-                var email, password, user, isPassword, secretToken, token, error_3;
+                var email, password, user, isPassword, secretToken, token, error_1;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
@@ -127,19 +90,18 @@ module.exports = {
                             _b.label = 1;
                         case 1:
                             _b.trys.push([1, 4, , 5]);
-                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .findOne({ email: email })];
+                            return [4 /*yield*/, userStore_1.UserStore.findUserByEmail(email)];
                         case 2:
                             user = _b.sent();
                             if (!user) {
-                                throw new Error("user not found");
+                                throw new Error();
                             }
                             ;
                             return [4 /*yield*/, bcryptjs_1.compare(password, user.password.toString())];
                         case 3:
                             isPassword = _b.sent();
                             if (!isPassword) {
-                                throw new Error("check data provider");
+                                throw new Error();
                             }
                             ;
                             secretToken = process.env.SECRET_TOKEN_KEY || "mySecret";
@@ -148,8 +110,8 @@ module.exports = {
                                     token: token
                                 }];
                         case 4:
-                            error_3 = _b.sent();
-                            return [3 /*break*/, 5];
+                            error_1 = _b.sent();
+                            throw new Error("Check data provides");
                         case 5: return [2 /*return*/];
                     }
                 });
@@ -165,10 +127,7 @@ module.exports = {
                 var recipes;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                .createQueryBuilder("recipe")
-                                .where("recipe.user = :user", { user: id })
-                                .getMany()];
+                        case 0: return [4 /*yield*/, recipeStore_1.RecipeStore.findRecipeByPropietary(id)];
                         case 1:
                             recipes = _b.sent();
                             return [2 /*return*/, recipes];

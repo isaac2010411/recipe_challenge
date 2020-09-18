@@ -19,7 +19,7 @@ export class Recipe {
     @Column()
     ingredients: string;
 
-    @ManyToOne(type => Category, category => category.recipes)
+    @ManyToOne(type => Category, category => category.recipes,{cascade:false})
     @JoinColumn({name:"categoryId"})
     category: Category;
 

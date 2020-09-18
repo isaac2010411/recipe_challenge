@@ -12,9 +12,15 @@ module.exports = gql`
   input createCategoryInut {
     name:String!
   }
+
+  input updateCategoryInput{
+    name:String
+  }
   
   extend type Mutation {
+    updateCategory (id:ID! , input:updateCategoryInput):Category
     createCategory (input: createCategoryInut!): Category
+    deleteCategory(id:ID!) :Boolean
   }
 
   type Category {

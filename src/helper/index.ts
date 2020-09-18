@@ -1,3 +1,6 @@
+import { getRepository } from "typeorm";
+import { User } from "../entities/userEntity";
+
 const jwt = require("jsonwebtoken")
 
 module.exports = {
@@ -10,11 +13,17 @@ module.exports = {
         const payload = jwt.verify(token, process.env.SECRET_TOKEN_KEY || "mySecret");
         email = payload.email
       }
-      return email;
+      
+      let user = await getRepository(User)
+        .findOne({ email })
+      
+      return {
+        email,
+        user
+      };
 
     } catch (error) {
       throw new Error ("Login to continue");
     }
-   
   }
 }

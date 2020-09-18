@@ -68,7 +68,8 @@ var apolloServer = new ApolloServer({
                     case 1:
                         isUser = _b.sent();
                         return [2 /*return*/, {
-                                email: isUser
+                                email: isUser.email,
+                                isLogged: isUser.user
                             }];
                     case 2:
                         error_1 = _b.sent();

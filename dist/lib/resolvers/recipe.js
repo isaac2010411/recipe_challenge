@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,84 +36,79 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var typeorm_1 = require("typeorm");
 var graphql_resolvers_1 = require("graphql-resolvers");
 var middleware_1 = require("./middleware");
-var userEntity_1 = require("../../entities/userEntity");
-var uuid_1 = require("uuid");
-var recipeEntity_1 = require("../../entities/recipeEntity");
-var categoryEntity_1 = require("../../entities/categoryEntity");
+var recipeStore_1 = require("../store/recipeStore");
+var categoryStore_1 = require("../store/categoryStore");
+var userStore_1 = require("../store/userStore");
 // RECIPE RESOLVERS  AND MUTATIONS
 module.exports = {
     Query: {
         //return all recipes
-        getRecipes: function () { return __awaiter(void 0, void 0, void 0, function () {
-            var recipes;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                            .find({ relations: ["user", "category"] })];
-                    case 1:
-                        recipes = _a.sent();
-                        return [2 /*return*/, recipes];
-                }
-            });
-        }); },
+        getRecipes: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, recipeStore_1.RecipeStore.findAllRecipes()];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); }); }),
         //return recipeID
-        getOneRecipe: function (_, _a) {
+        getOneRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, _a) {
             var id = _a.id;
-            return __awaiter(void 0, void 0, void 0, function () {
-                var recipe;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                .findOne(id, { relations: ["user"] })];
-                        case 1:
-                            recipe = _b.sent();
-                            return [2 /*return*/, recipe];
-                    }
-                });
-            });
-        }
+            return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, recipeStore_1.RecipeStore.findRecipeById(id)];
+                    case 1: return [2 /*return*/, _b.sent()];
+                }
+            }); });
+        })
     },
     Mutation: {
+        //if user ownerRecipe ..delete recipe 
+        deleteRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, middleware_1.isOwnerRecipe, function (_, _a) {
+            var id = _a.id;
+            return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, recipeStore_1.RecipeStore.deleteRecipe(id)];
+                    case 1: return [2 /*return*/, _b.sent()];
+                }
+            }); });
+        }),
+        //if user ownerRecipe ..update recipe 
+        updateRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, middleware_1.isOwnerRecipe, function (_, data) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, recipeStore_1.RecipeStore.updateRecipe(data)];
+                case 1: return [2 /*return*/, _a.sent()];
+            }
+        }); }); }),
         createRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, _a, _b) {
             var input = _a.input;
             var email = _b.email;
             return __awaiter(void 0, void 0, void 0, function () {
-                var category, user, newrecipe, result;
+                var category, user, newRecipe, error_1;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
-                        case 0: return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                                .findOne({ name: input.category })];
+                        case 0:
+                            _c.trys.push([0, 6, , 7]);
+                            return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryByName(input.category)];
                         case 1:
                             category = _c.sent();
-                            return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                    .findOne({ email: email })];
+                            return [4 /*yield*/, userStore_1.UserStore.findUserByEmail(email)];
                         case 2:
                             user = _c.sent();
-                            console.log(user);
-                            if (!user) return [3 /*break*/, 7];
+                            if (!user) return [3 /*break*/, 4];
                             if (!!category) return [3 /*break*/, 4];
-                            //create new  category
-                            category = new categoryEntity_1.Category();
-                            category.id = uuid_1.v4();
-                            category.name = input.category;
-                            return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                                    .save(category)];
+                            return [4 /*yield*/, categoryStore_1.CategoryStore.createNewCategory(input.category)];
                         case 3:
-                            _c.sent();
+                            category = _c.sent();
                             _c.label = 4;
-                        case 4: return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                .create(__assign(__assign({ id: uuid_1.v4() }, input), { category: category, user: user === null || user === void 0 ? void 0 : user.id }))];
+                        case 4: return [4 /*yield*/, recipeStore_1.RecipeStore.createNewRecipe(category, input, user)];
                         case 5:
-                            newrecipe = _c.sent();
-                            return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                    .save(newrecipe)];
+                            newRecipe = _c.sent();
+                            return [2 /*return*/, newRecipe];
                         case 6:
-                            result = _c.sent();
-                            return [2 /*return*/, result];
-                        case 7: throw new Error("Error Login");
+                            error_1 = _c.sent();
+                            throw new Error("Error to create recipe");
+                        case 7: return [2 /*return*/];
                     }
                 });
             });
@@ -135,36 +119,21 @@ module.exports = {
         //find userid  
         user: function (_a) {
             var user = _a.user;
-            return __awaiter(void 0, void 0, void 0, function () {
-                var propietary;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0: return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
-                                .findOne(user.id, { relations: ["recipes"] })];
-                        case 1:
-                            propietary = _b.sent();
-                            return [2 /*return*/, propietary];
-                    }
-                });
-            });
+            return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, userStore_1.UserStore.findUserById(user.id)];
+                    case 1: return [2 /*return*/, _b.sent()];
+                }
+            }); });
         },
         category: function (_a) {
-            var id = _a.id;
-            return __awaiter(void 0, void 0, void 0, function () {
-                var category;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            console.log(id);
-                            return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                                    .findOne(id, { relations: ["category"] })];
-                        case 1:
-                            category = _b.sent();
-                            console.log(category);
-                            return [2 /*return*/, category];
-                    }
-                });
-            });
+            var category = _a.category;
+            return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryById(category.id)];
+                    case 1: return [2 /*return*/, _b.sent()];
+                }
+            }); });
         }
     },
 };

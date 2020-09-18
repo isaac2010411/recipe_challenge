@@ -5,16 +5,16 @@ import { Recipe } from "./recipeEntity";
 export class User {
 
     @PrimaryGeneratedColumn("uuid")
-    id: String;
+    id: string;
 
     @Column({type:"varchar" , length:"20" }) 
-    name: String;
+    name: string;
 
     @Column({type:"varchar" , length:"45"})
-    email: String;
+    email: string;
 
     @Column({type:"varchar" , length:"250"})
-    password: String;
+    password: string;
     
     @OneToMany((type: Recipe) => Recipe, recipe => recipe.user, {
         eager: true,
@@ -24,8 +24,8 @@ export class User {
     recipes: Recipe[];
     
     @CreateDateColumn()
-    createdAt: String;
+    createdAt: string;
 
     @UpdateDateColumn()
-    updatedAt: String;
+    updatedAt: string;
 }   
