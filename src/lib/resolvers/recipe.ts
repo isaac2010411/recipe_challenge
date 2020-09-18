@@ -55,6 +55,7 @@ module.exports = {
                 }
                 
                 category = await CategoryStore.findCategoryByName(input.category)
+                
                 if (!category) {
                   category = await CategoryStore.createNewCategory(input.category);
                 }    

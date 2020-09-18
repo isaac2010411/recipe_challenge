@@ -50,7 +50,7 @@ export const RecipeStore =
   },
 
   createNewRecipe: async (category: any,data:any , user: any) => {
-    console.log(user)
+  
     let newrecipe = await getRepository<Recipe>(Recipe)
       .create({
         id: v4(),
@@ -76,9 +76,11 @@ export const RecipeStore =
         }
 
       isCategory = await CategoryStore.findCategoryByName(input.category)
+
       if (!isCategory) {
         isCategory = await CategoryStore.createNewCategory(input.category)
-      }        
+      }
+      
     } 
       //Edit recipe
     console.log(isCategory)
