@@ -20,17 +20,17 @@ See Deployment to know how the project.
 
 
 
-Pre requirements📋
+## Pre requirements📋
 
-## node
-## mysql
+#### node
+#### mysql
 
 
-Instalation 🔧
+## Instalation 🔧
 
-## npm i ---- install node_modules
-## npm run build ---- buid proyect
-## npm start ---- start to project
+######  npm i ---- install node_modules
+###### npm run build ---- buid proyect
+######  npm start ---- start to project
 
 
 ## Entities
@@ -66,7 +66,7 @@ Name
  	getCategories ,
 	getOneCategory ,
 	getMyRecipes ,
-  
+
 ###### Mutations:
 	createRecipe ,
 	createCategory ,
@@ -82,11 +82,12 @@ Name
 
 After registering and logging in you will receive a token for inquiries
 
-usage---
+##### usage
+```
 {
   "authorization" = "Bearer your-app-token"
 }
-
+```
 
 
 
