@@ -60,22 +60,22 @@ Name
 
 ## Usage playground graphql 
 
-Queries: 
-	getRecipes
-	getOneRecipe
-	getCategories
-	getOneCategory
-	getMyRecipes
+Queries:
+	getRecipes ,
+	getOneRecipe ,
+ 	getCategories ,
+	getOneCategory ,
+	getMyRecipes ,
 
 Mutations:
-	createRecipe
-	createCategory
-	updateRecipe
-	updateCategory
-	deleteRecipe
-	deleteCategory
-	signUp
-	login
+	createRecipe ,
+	createCategory ,
+	updateRecipe ,
+	updateCategory ,
+	deleteRecipe ,
+	deleteCategory ,
+	signUp ,
+	login ,
 
 
 
