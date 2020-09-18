@@ -90,16 +90,22 @@ app.use('/', function (req, res) { return __awaiter(void 0, void 0, void 0, func
         return [2 /*return*/];
     });
 }); });
-app.listen(process.env || 3000, function () { return __awaiter(void 0, void 0, void 0, function () {
+app.listen(process.env.PORT || 3000, function () { return __awaiter(void 0, void 0, void 0, function () {
+    var error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: 
-            //Database Conection __
-            return [4 /*yield*/, createConnection(config)];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                //Database Conection __
+                return [4 /*yield*/, createConnection(config)];
             case 1:
                 //Database Conection __
                 _a.sent();
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                error_2 = _a.sent();
+                throw new Error("Error database connect");
+            case 3: return [2 /*return*/];
         }
     });
 }); });

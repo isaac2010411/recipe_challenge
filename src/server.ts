@@ -38,7 +38,7 @@ const apolloServer = new ApolloServer({
     }
     }
 });
-
+const port = process.env.PORT || 3000;
 
 apolloServer.applyMiddleware({
   app,
@@ -49,14 +49,13 @@ app.use('/', async (req: Request, res: Response) => {
   res.json({path:`${apolloServer.graphqlPath}`})
 })
 
-app.listen(process.env || 3000, async () => {
+app.listen( port , async () => {
   try {
     //Database Conection __
     await createConnection(config);
   
   } catch (error) {
     throw new Error("Error database connect");
-    
   }
   
 })
