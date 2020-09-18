@@ -49,7 +49,14 @@ app.use('/', async (req: Request, res: Response) => {
   res.json({path:`${apolloServer.graphqlPath}`})
 })
 
-app.listen( process.env|| 3000, async () => {
-  //Database Conection __
-  await createConnection(config);
+app.listen(process.env || 3000, async () => {
+  try {
+    //Database Conection __
+    await createConnection(config);
+  
+  } catch (error) {
+    throw new Error("Error database connect");
+    
+  }
+  
 })
