@@ -29,30 +29,30 @@ module.exports = {
     },
     //Login
     login: async (_: any, { input }: any) => {
+    
       const { email, password } = input;
-
       try {
         //search user
         const user = await UserStore.findUserByEmail(email);
 
         if (!user) {
-          throw new Error();
+          throw new Error("User not found");
         };
         //Compare password
-        const isPassword =await compare(password, user.password.toString());
+        const isPassword = await compare(password, user.password.toString());
 
-          if (!isPassword) {
-            throw new Error();
-          };
-          const secretToken = process.env.SECRET_TOKEN_KEY || "mySecret"
-          //token assign
-          const token = jwt.sign({ email: user.email }, secretToken , {expiresIn: 60 * 60})
-
-          return {
-            token
-          }
-        } catch (error) {
+        if (!isPassword) {
           throw new Error("Check data provides");
+        };
+        const secretToken = process.env.SECRET_TOKEN_KEY || "mySecret"
+        //token assign
+        const token = jwt.sign({ email: user.email }, secretToken, { expiresIn: 60 * 60 })
+
+        return {
+          token
+        }
+      } catch (error) {
+        throw new Error(error);
       }
     }
   },

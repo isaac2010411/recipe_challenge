@@ -91,18 +91,15 @@ module.exports = {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log(data);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, categoryStore_1.CategoryStore.updateCategory(data)];
-                    case 2:
+                    case 1:
                         categoryUpdate = _a.sent();
                         return [2 /*return*/, categoryUpdate];
-                    case 3:
+                    case 2:
                         error_1 = _a.sent();
                         throw new Error("" + error_1);
-                    case 4: return [2 /*return*/];
+                    case 3: return [2 /*return*/];
                 }
             });
         }); }),

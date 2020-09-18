@@ -17,11 +17,9 @@ export const RecipeStore =
     }
   },
   findRecipeByPropietary: async (user: any) => {
-    
     try {
       const recipes = await getRepository<Recipe>(Recipe)
         .find({user})
-     
       return recipes;
     } catch (error) {
       throw new Error("error to delete");
@@ -50,6 +48,7 @@ export const RecipeStore =
       throw new Error("error to delete");
     }
   },
+
   createNewRecipe: async (category: any,data:any , user: any) => {
     console.log(user)
     let newrecipe = await getRepository<Recipe>(Recipe)
@@ -65,18 +64,24 @@ export const RecipeStore =
 
     return result;
   },
-  updateRecipe: async ( data: any) => {
+  updateRecipe: async (data: any) => {
     let { input, id } = data;
-    try {
-      let recipe = await RecipeStore.findRecipeById(id);
-      let isCategory;
-  
-      if (input.category !== recipe?.category.name) {
-          isCategory = await CategoryStore.createNewCategory(input.category)
-        //update category..|| create newCategory
-      }
-  
+    let recipe = await RecipeStore.findRecipeById(id);
+    let isCategory;
+
+    if (input.category !== recipe?.category.name) {
+        
+        if (input.category.length < 3) {
+          throw new Error("three letter minimin");
+        }
+
+      isCategory = await CategoryStore.findCategoryByName(input.category)
+      if (!isCategory) {
+        isCategory = await CategoryStore.createNewCategory(input.category)
+      }        
+    } 
       //Edit recipe
+    console.log(isCategory)
       await getRepository(Recipe)
         .createQueryBuilder()
         .where("recipe.id = :id", {id})
@@ -93,11 +98,6 @@ export const RecipeStore =
       let newRecipe = await getRepository<Recipe>(Recipe)
         .findOne({ id },{relations:["category"]})
     
-      return newRecipe;
-
-     } catch (error) {
-       throw new Error("Error to add Category");
-       
-     }
+    return newRecipe;
   }
 }

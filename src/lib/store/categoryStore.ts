@@ -23,14 +23,9 @@ export const CategoryStore = {
   },
 //find by id
   findCategoryById: async (id: Category) => {
-    try {
       let category = await getRepository(Category)
-        .findOne(id,
-          { relations: ["recipes"] })
+        .findOne(id)
       return category;
-    } catch (error) {
-      throw new Error("Category not found");
-    }
   },
   //find by id
   findRecipesByCategory: async (id: Category) => {
@@ -45,34 +40,34 @@ export const CategoryStore = {
 //create new category
   createNewCategory: async (name: any) => {
     
-    try {
-       let category = await getRepository(Category)
-        .findOne({name})
-        
-        if (!category) {
-          category = new Category()
-          category.id = v4()
-          category.name = name
-          await getRepository<Category>(Category)
-            .save(category)
-        }
-      return category;
-      
-    } catch (error) {
-      throw new Error("Error in AddCategory");
+    let category = await getRepository(Category)
+    .findOne({name})
+ 
+    if (!category) {
+      category = new Category()
+      category.id = v4()
+      category.name = name
+      await getRepository<Category>(Category)
+        .save(category)
     }
+
+    return category;
   },
   //update Category name
   updateCategory: async (data: any ) => {
     
     const { input, id } = data;
+    console.log(input)
       let isCategory = await getRepository(Category)
       .findOne({id})
 
         if (!isCategory) {
           throw new Error("Category not found");
         } 
-        
+        if (input.name.length < 3) {
+          throw new Error("three letter minimin");
+      }
+    
       let isNameOk = await getRepository(Category)
       .findOne({name:input.name})
 

@@ -98,14 +98,14 @@ module.exports = {
                         case 2:
                             user = _b.sent();
                             if (!user) {
-                                throw new Error();
+                                throw new Error("User not found");
                             }
                             ;
                             return [4 /*yield*/, bcryptjs_1.compare(password, user.password.toString())];
                         case 3:
                             isPassword = _b.sent();
                             if (!isPassword) {
-                                throw new Error();
+                                throw new Error("Check data provides");
                             }
                             ;
                             secretToken = process.env.SECRET_TOKEN_KEY || "mySecret";
@@ -115,7 +115,7 @@ module.exports = {
                                 }];
                         case 4:
                             error_1 = _b.sent();
-                            throw new Error("Check data provides");
+                            throw new Error(error_1);
                         case 5: return [2 /*return*/];
                     }
                 });

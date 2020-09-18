@@ -14,17 +14,18 @@ export const UserStore = {
       return repository;
 
     } catch (error) {
-      throw new Error("User not found , incorrected email");
+      throw new Error("User not found ");
     }
    
   },
 
-  findUserById: async (id:any) => {
+  findUserById: async (id: any) => {
+    console.log()
     try {
        
       const repository = await getRepository(User)
-        .findOne({id},{relations:["recipes"]})
-      
+        .findOne({ id }, { relations: ["recipes"] })
+      console.log(repository)
       return repository;
 
     } catch (error) {
@@ -59,8 +60,7 @@ export const UserStore = {
       return newUser;
 
     } catch (error) {
-      console.log(error)
+      throw new Error(error);
     }
-    
   }
 }

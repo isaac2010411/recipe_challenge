@@ -144,50 +144,47 @@ exports.RecipeStore = {
         });
     }); },
     updateRecipe: function (data) { return __awaiter(void 0, void 0, void 0, function () {
-        var input, id, recipe, isCategory, newRecipe, error_5;
+        var input, id, recipe, isCategory, newRecipe;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     input = data.input, id = data.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 7, , 8]);
                     return [4 /*yield*/, exports.RecipeStore.findRecipeById(id)];
-                case 2:
+                case 1:
                     recipe = _a.sent();
-                    isCategory = void 0;
                     if (!(input.category !== (recipe === null || recipe === void 0 ? void 0 : recipe.category.name))) return [3 /*break*/, 4];
-                    return [4 /*yield*/, categoryStore_1.CategoryStore.createNewCategory(input.category)
-                        //update category..|| create newCategory
-                    ];
+                    if (input.category.length < 3) {
+                        throw new Error("three letter minimin");
+                    }
+                    return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryByName(input.category)];
+                case 2:
+                    isCategory = _a.sent();
+                    if (!!isCategory) return [3 /*break*/, 4];
+                    return [4 /*yield*/, categoryStore_1.CategoryStore.createNewCategory(input.category)];
                 case 3:
                     isCategory = _a.sent();
                     _a.label = 4;
-                case 4: 
-                //Edit recipe
-                return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
-                        .createQueryBuilder()
-                        .where("recipe.id = :id", { id: id })
-                        .update(recipeEntity_1.Recipe)
-                        .set({
-                        name: input.name,
-                        ingredients: input.ingredients,
-                        description: input.description,
-                        category: isCategory
-                    })
-                        .execute()];
-                case 5:
+                case 4:
                     //Edit recipe
+                    console.log(isCategory);
+                    return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
+                            .createQueryBuilder()
+                            .where("recipe.id = :id", { id: id })
+                            .update(recipeEntity_1.Recipe)
+                            .set({
+                            name: input.name,
+                            ingredients: input.ingredients,
+                            description: input.description,
+                            category: isCategory
+                        })
+                            .execute()];
+                case 5:
                     _a.sent();
                     return [4 /*yield*/, typeorm_1.getRepository(recipeEntity_1.Recipe)
                             .findOne({ id: id }, { relations: ["category"] })];
                 case 6:
                     newRecipe = _a.sent();
                     return [2 /*return*/, newRecipe];
-                case 7:
-                    error_5 = _a.sent();
-                    throw new Error("Error to add Category");
-                case 8: return [2 /*return*/];
             }
         });
     }); }

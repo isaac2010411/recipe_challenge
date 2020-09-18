@@ -77,42 +77,60 @@ module.exports = {
             }); });
         }),
         //if user ownerRecipe ..update recipe 
-        updateRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, middleware_1.isOwnerRecipe, function (_, data) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, recipeStore_1.RecipeStore.updateRecipe(data)];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        }); }); }),
+        updateRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, middleware_1.isOwnerRecipe, function (_, data) { return __awaiter(void 0, void 0, void 0, function () {
+            var result, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, recipeStore_1.RecipeStore.updateRecipe(data)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                    case 2:
+                        error_1 = _a.sent();
+                        throw new Error(error_1);
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); }),
         //create recipe
         createRecipe: graphql_resolvers_1.combineResolvers(middleware_1.isAuthenticated, function (_, _a, _b) {
             var input = _a.input;
             var email = _b.email;
             return __awaiter(void 0, void 0, void 0, function () {
-                var category, user, newRecipe, error_1;
+                var category, user, newRecipe, error_2;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
-                            _c.trys.push([0, 6, , 7]);
+                            _c.trys.push([0, 7, , 8]);
                             return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryByName(input.category)];
                         case 1:
                             category = _c.sent();
                             return [4 /*yield*/, userStore_1.UserStore.findUserByEmail(email)];
                         case 2:
                             user = _c.sent();
-                            if (!user) return [3 /*break*/, 4];
-                            if (!!category) return [3 /*break*/, 4];
-                            return [4 /*yield*/, categoryStore_1.CategoryStore.createNewCategory(input.category)];
+                            if (!user) return [3 /*break*/, 5];
+                            if (!!category) return [3 /*break*/, 5];
+                            if (input.category.length < 3) {
+                                throw new Error("three letter minimin category");
+                            }
+                            return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryByName(input.category)];
                         case 3:
                             category = _c.sent();
-                            _c.label = 4;
-                        case 4: return [4 /*yield*/, recipeStore_1.RecipeStore.createNewRecipe(category, input, user)];
-                        case 5:
+                            if (!!category) return [3 /*break*/, 5];
+                            return [4 /*yield*/, categoryStore_1.CategoryStore.createNewCategory(input.category)];
+                        case 4:
+                            category = _c.sent();
+                            _c.label = 5;
+                        case 5: return [4 /*yield*/, recipeStore_1.RecipeStore.createNewRecipe(category, input, user)];
+                        case 6:
                             newRecipe = _c.sent();
                             return [2 /*return*/, newRecipe];
-                        case 6:
-                            error_1 = _c.sent();
-                            throw new Error("Error to create recipe");
-                        case 7: return [2 /*return*/];
+                        case 7:
+                            error_2 = _c.sent();
+                            throw new Error(error_2);
+                        case 8: return [2 /*return*/];
                     }
                 });
             });
@@ -132,12 +150,21 @@ module.exports = {
         },
         category: function (_a) {
             var category = _a.category;
-            return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryById(category.id)];
-                    case 1: return [2 /*return*/, _b.sent()];
-                }
-            }); });
+            return __awaiter(void 0, void 0, void 0, function () {
+                var categoryRecipe;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            console.log(category);
+                            console.log(category.id);
+                            return [4 /*yield*/, categoryStore_1.CategoryStore.findCategoryById(category === null || category === void 0 ? void 0 : category.id)];
+                        case 1:
+                            categoryRecipe = _b.sent();
+                            console.log(categoryRecipe);
+                            return [2 /*return*/, categoryRecipe];
+                    }
+                });
+            });
         }
     },
 };

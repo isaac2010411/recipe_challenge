@@ -31,10 +31,9 @@ module.exports = {
     //update recipe
     updateCategory: combineResolvers(isAuthenticated,isCategory,
       async (_: any, data: any) => {
-        console.log(data)
         try {
           let categoryUpdate = await CategoryStore.updateCategory(data)
-          return categoryUpdate
+          return categoryUpdate;
         } catch (error) {
           throw new Error(`${error}`);
         }

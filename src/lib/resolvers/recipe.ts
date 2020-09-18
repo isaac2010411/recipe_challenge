@@ -29,8 +29,15 @@ module.exports = {
     
     //if user ownerRecipe ..update recipe 
     updateRecipe:combineResolvers( isAuthenticated , isOwnerRecipe,
-      async (_: any, data: any) => await RecipeStore.updateRecipe(data)),
-    
+      async (_: any, data: any) => {
+        try {
+          let result = await RecipeStore.updateRecipe(data);
+          return result;
+
+        } catch (error) {
+          throw new Error(error);
+        }
+      }),
     //create recipe
     createRecipe:
       combineResolvers(isAuthenticated,
@@ -39,16 +46,29 @@ module.exports = {
             let category = await CategoryStore.findCategoryByName(input.category);
             //search user
             const user = await UserStore.findUserByEmail(email);
-        
+            
             if (user) {
               if (!category) {
-                category = await CategoryStore.createNewCategory(input.category);
+
+                if (input.category.length < 3) {
+                  throw new Error("three letter minimin category");
+                }
+                
+                category = await CategoryStore.findCategoryByName(input.category)
+                if (!category) {
+                  category = await CategoryStore.createNewCategory(input.category);
+                }    
+              
               }
             }
-            let newRecipe =await RecipeStore.createNewRecipe(category, input, user)
+            //create recipe;
+            let newRecipe = await RecipeStore.createNewRecipe(category, input, user);
+
             return newRecipe;
+
+
           } catch (error) {
-            throw new Error("Error to create recipe");
+            throw new Error(error);
         }
     })
   },
@@ -56,6 +76,12 @@ module.exports = {
   Recipe: { 
     //find userid  
     user: async ({ user }: any) => await UserStore.findUserById(user.id) ,
-    category: async ({ category }: any) =>await CategoryStore.findCategoryById(category.id)
+    category: async ({ category }: any) => {
+      console.log(category)
+      console.log(category.id)
+      let categoryRecipe = await CategoryStore.findCategoryById(category?.id);
+      console.log(categoryRecipe)
+      return categoryRecipe;
+    }
   },
 }; 

@@ -56,7 +56,6 @@ app.use(express.json());
 var apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
-    introspection: true,
     playground: true,
     context: function (_a) {
         var req = _a.req;

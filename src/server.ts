@@ -25,7 +25,6 @@ app.use(express.json());
 const apolloServer = new ApolloServer({
   typeDefs, 
   resolvers,
-  introspection: true,
   playground: true,
   context: async ({ req }: ExpressContext) => {
       const isUser = await verifyUser(req.headers.authorization);

@@ -74,26 +74,20 @@ exports.CategoryStore = {
     }); },
     //find by id
     findCategoryById: function (id) { return __awaiter(void 0, void 0, void 0, function () {
-        var category, error_2;
+        var category;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                            .findOne(id, { relations: ["recipes"] })];
+                case 0: return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
+                        .findOne(id)];
                 case 1:
                     category = _a.sent();
                     return [2 /*return*/, category];
-                case 2:
-                    error_2 = _a.sent();
-                    throw new Error("Category not found");
-                case 3: return [2 /*return*/];
             }
         });
     }); },
     //find by id
     findRecipesByCategory: function (id) { return __awaiter(void 0, void 0, void 0, function () {
-        var category, error_3;
+        var category, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -104,7 +98,7 @@ exports.CategoryStore = {
                     category = _a.sent();
                     return [2 /*return*/, category === null || category === void 0 ? void 0 : category.recipes];
                 case 2:
-                    error_3 = _a.sent();
+                    error_2 = _a.sent();
                     throw new Error("Category not found");
                 case 3: return [2 /*return*/];
             }
@@ -112,13 +106,11 @@ exports.CategoryStore = {
     }); },
     //create new category
     createNewCategory: function (name) { return __awaiter(void 0, void 0, void 0, function () {
-        var category, error_4;
+        var category;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 4, , 5]);
-                    return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
-                            .findOne({ name: name })];
+                case 0: return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
+                        .findOne({ name: name })];
                 case 1:
                     category = _a.sent();
                     if (!!category) return [3 /*break*/, 3];
@@ -131,10 +123,6 @@ exports.CategoryStore = {
                     _a.sent();
                     _a.label = 3;
                 case 3: return [2 /*return*/, category];
-                case 4:
-                    error_4 = _a.sent();
-                    throw new Error("Error in AddCategory");
-                case 5: return [2 /*return*/];
             }
         });
     }); },
@@ -145,12 +133,16 @@ exports.CategoryStore = {
             switch (_a.label) {
                 case 0:
                     input = data.input, id = data.id;
+                    console.log(input);
                     return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
                             .findOne({ id: id })];
                 case 1:
                     isCategory = _a.sent();
                     if (!isCategory) {
                         throw new Error("Category not found");
+                    }
+                    if (input.name.length < 3) {
+                        throw new Error("three letter minimin");
                     }
                     return [4 /*yield*/, typeorm_1.getRepository(categoryEntity_1.Category)
                             .findOne({ name: input.name })];
@@ -179,7 +171,7 @@ exports.CategoryStore = {
         });
     }); },
     deleteCategory: function (id) { return __awaiter(void 0, void 0, void 0, function () {
-        var recipes, error_5;
+        var recipes, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -198,7 +190,7 @@ exports.CategoryStore = {
                     _a.sent();
                     return [2 /*return*/, true];
                 case 3:
-                    error_5 = _a.sent();
+                    error_3 = _a.sent();
                     throw new Error("Error to delete");
                 case 4: return [2 /*return*/];
             }

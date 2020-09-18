@@ -64,16 +64,20 @@ exports.UserStore = {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
+                    console.log();
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, typeorm_1.getRepository(userEntity_1.User)
                             .findOne({ id: id }, { relations: ["recipes"] })];
-                case 1:
-                    repository = _a.sent();
-                    return [2 /*return*/, repository];
                 case 2:
+                    repository = _a.sent();
+                    console.log(repository);
+                    return [2 /*return*/, repository];
+                case 3:
                     error_2 = _a.sent();
                     throw new Error("User not found , incorrected id");
-                case 3: return [2 /*return*/];
+                case 4: return [2 /*return*/];
             }
         });
     }); },
@@ -107,8 +111,7 @@ exports.UserStore = {
                     return [2 /*return*/, newUser];
                 case 4:
                     error_3 = _a.sent();
-                    console.log(error_3);
-                    return [3 /*break*/, 5];
+                    throw new Error(error_3);
                 case 5: return [2 /*return*/];
             }
         });
