@@ -80,6 +80,7 @@ var apolloServer = new ApolloServer({
         });
     }
 });
+var port = process.env.PORT || 3000;
 apolloServer.applyMiddleware({
     app: app,
     path: '/graphql'
@@ -90,7 +91,7 @@ app.use('/', function (req, res) { return __awaiter(void 0, void 0, void 0, func
         return [2 /*return*/];
     });
 }); });
-app.listen(process.env.PORT || 3000, function () { return __awaiter(void 0, void 0, void 0, function () {
+app.listen(port, function () { return __awaiter(void 0, void 0, void 0, function () {
     var error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
