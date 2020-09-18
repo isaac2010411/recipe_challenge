@@ -78,6 +78,15 @@ Mutations:
 	login ,
 
 
+## http header
+
+After registering and logging in you will receive a token for inquiries
+
+usage---
+{
+  "authorization" = "Bearer your-app-token"
+}
+
 
 
 
@@ -96,4 +105,23 @@ G**raphql
 
 Figueroa Isaac
 
+## Aplication Structure
+
+
+
+
+├── dist                     # Distribution folder
+├── node_modules             # Modules node
+├                                         
+├── src                      # Static public assets and uploads
+│   ├── Entities             # Entities database
+│   ├── helper               # Helper code
+│   └── lib                  # GraphQL server
+│       ├── resolvers        # Resolver GraphQL 
+│       ├── store            # Store
+│       └── typeDefs         # typeDefs GraphQL
+│               
+├── server                   # Server application start point
+├── ormconfig                # Config typeOrm 
+│── tsconfig                 # Config Typescript compile
 
