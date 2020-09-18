@@ -33,9 +33,9 @@ Instalation 🔧
 ## npm start ---- start to project
 
 
-Entities
+## Entities
 
-
+```
 USER{
   ID
   Name
@@ -57,17 +57,17 @@ CATEGORY{
   ID
 Name
 }
-
+```
 ## Usage playground graphql 
-
-Queries:
+```
+###### Queries:
 	getRecipes ,
 	getOneRecipe ,
  	getCategories ,
 	getOneCategory ,
 	getMyRecipes ,
-
-Mutations:
+  
+###### Mutations:
 	createRecipe ,
 	createCategory ,
 	updateRecipe ,
@@ -77,7 +77,7 @@ Mutations:
 	signUp ,
 	login ,
 
-
+```
 ## http header
 
 After registering and logging in you will receive a token for inquiries
@@ -91,7 +91,7 @@ usage---
 
 
 ## Build to 🛠️
-
+```
 **NodeJs
 G**raphql
 **TypeOrm
@@ -100,6 +100,7 @@ G**raphql
 **JWT
 **MySql
 
+```
 
 ## Author ✒️
 
